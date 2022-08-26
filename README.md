@@ -8,5 +8,5 @@ CUISeparator supports Swift Package Manager. To use it the following to your `Pa
 
 ```
 dependencies: [
-    .package(name: "CUISeparator", url: "https://github.com/robhasacamera/CUISeparator.git", from: "0.1.1")
+    .package(name: "CUISeparator", url: "https://github.com/robhasacamera/CUISeparator.git", from: "0.1.2")
 ],

@@ -13,7 +13,7 @@ let package = Package(
             targets: ["CUISeparator"]),
     ],
     dependencies: [
-        .package(name: "CUIPreviewKit", url: "https://github.com/robhasacamera/CUIPreviewKit.git", from: "0.1.1")
+        .package(name: "CUIPreviewKit", url: "https://github.com/robhasacamera/CUIPreviewKit.git", from: "0.1.2")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
