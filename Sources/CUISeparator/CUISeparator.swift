@@ -141,8 +141,8 @@ public struct CUISeparator: View {
         _CUISeparatorPath(orientation: orientation)
             .stroke(style: StrokeStyle(lineWidth: lineWidth, lineCap: lineCap, dash: dash))
             .frame(
-                width: orientation == .vertical ? lineWidth : nil,
-                height: orientation == .horizontal ? lineWidth : nil
+                width: orientation == .vertical ? max(lineWidth, 1) : nil,
+                height: orientation == .horizontal ? max(lineWidth, 1) : nil
             )
     }
 }
@@ -217,6 +217,26 @@ struct Separator_Previews: PreviewProvider {
                 }
             }
             .fixedSize(horizontal: false, vertical: true)
+        }
+
+        CUICenteredPreview(title: ".vertical, style & weight") {
+//            ScrollView(.horizontal) {
+            VStack(alignment: .center) {
+                ForEach(CUISeparator.Style.allCases) { style in
+                    HStack {
+                    ForEach(CUISeparator.Weight.allCases) { weight in
+                        CUICaptionedView("\(style), \(weight)") {
+                            CUISeparator(
+                                style: style,
+                                weight: weight,
+                                orientation: .vertical
+                            )
+                        }
+                    }
+                    }
+                }
+            }
+//            }
         }
     }
 }
