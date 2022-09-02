@@ -28,36 +28,55 @@ import CUIPreviewKit
 import SwiftUI
 
 public struct CUISeparator: View {
-    public enum Style: Identifiable, CaseIterable {
+    public enum Orientation: Identifiable, CaseIterable {
         case horizontal
         case vertical
 
-        public var id: Style { self }
+        public var id: Orientation { self }
     }
 
-    public var style: Style = .horizontal
+    public var orientation: Orientation = .horizontal
 
-    public init(style: CUISeparator.Style = .horizontal) {
-        self.style = style
+    public init(orientation: CUISeparator.Orientation = .horizontal) {
+        self.orientation = orientation
     }
 
     public var body: some View {
-        Rectangle()
-            .frame(width: style == .vertical ? 1 : nil,
-                   height: style == .horizontal ? 1 : nil)
+        _CUISeparatorPath(orientation: orientation)
+            .stroke(style: StrokeStyle(lineWidth: 1)) // , dash: [5]))
+            .frame(
+                width: orientation == .vertical ? 1 : nil,
+                height: orientation == .horizontal ? 1 : nil
+            )
+    }
+}
+
+struct _CUISeparatorPath: Shape {
+    var orientation: CUISeparator.Orientation
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: 0, y: 0))
+        path.addLine(to:
+            CGPoint(
+                x: orientation == .horizontal ? rect.width : 0,
+                y: orientation == .vertical ? rect.height : 0
+            )
+        )
+        return path
     }
 }
 
 struct Separator_Previews: PreviewProvider {
     static var previews: some View {
-        ForEach(CUISeparator.Style.allCases) { style in
+        ForEach(CUISeparator.Orientation.allCases) { orientation in
             CUICenteredPreview {
-                CUISeparator(style: style)
+                CUISeparator(orientation: orientation)
             }
         }
-        ForEach(CUISeparator.Style.allCases) { style in
+        ForEach(CUISeparator.Orientation.allCases) { orientation in
             CUICenteredPreview {
-                CUISeparator(style: style)
+                CUISeparator(orientation: orientation)
                     .foregroundColor(.yellow)
             }
         }
