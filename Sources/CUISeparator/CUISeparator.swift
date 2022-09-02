@@ -28,6 +28,9 @@ import CUIPreviewKit
 import SwiftUI
 
 public struct CUISeparator: View {
+    @Environment(\.displayScale)
+    var displayScale: CGFloat
+
     public enum Style: Identifiable, CaseIterable {
         case solid
         case dashed
@@ -43,8 +46,18 @@ public struct CUISeparator: View {
         public var id: Orientation { self }
     }
 
+    public enum Weight: Identifiable, CaseIterable {
+        case thin
+        case regular
+        case bold
+        case heavy
+
+        public var id: Weight { self }
+    }
+
     public var style: Style
     public var orientation: Orientation
+    public var weight: Weight
 
     var dash: [CGFloat] {
         switch style {
@@ -67,15 +80,26 @@ public struct CUISeparator: View {
         }
     }
 
-    var lineWidth: CGFloat
+    var lineWidth: CGFloat {
+        switch weight {
+        case .thin:
+            return 1 / displayScale
+        case .regular:
+            return 1
+        case .bold:
+            return 2
+        case .heavy:
+            return 3
+        }
+    }
 
     public init(
         style: Style = .solid,
-        linewidth: CGFloat = 1,
+        weight: Weight = .regular,
         orientation: CUISeparator.Orientation = .horizontal
     ) {
         self.style = style
-        self.lineWidth = linewidth
+        self.weight = weight
         self.orientation = orientation
     }
 
@@ -110,16 +134,20 @@ struct Separator_Previews: PreviewProvider {
         CUICenteredPreview(title: ".horizontal") {
             VStack {
                 ForEach(CUISeparator.Style.allCases) { style in
-                    CUICaptionedView("\(style)") {
-                        CUISeparator(
-                            style: style,
-                            orientation: .horizontal
-                        )
+                    ForEach(CUISeparator.Weight.allCases) { weight in
+                        CUICaptionedView("\(style), \(weight)") {
+                            CUISeparator(
+                                style: style,
+                                weight: weight,
+                                orientation: .horizontal
+                            )
+                        }
                     }
+                    Spacer(minLength: 30)
                 }
 
                 ForEach(CUISeparator.Style.allCases) { style in
-                    CUICaptionedView("\(style) .foregroundColor(.yellow)") {
+                    CUICaptionedView("\(style), .foregroundColor(.yellow)") {
                         CUISeparator(
                             style: style,
                             orientation: .horizontal
@@ -127,17 +155,8 @@ struct Separator_Previews: PreviewProvider {
                         .foregroundColor(.yellow)
                     }
                 }
-
-                ForEach(CUISeparator.Style.allCases) { style in
-                    CUICaptionedView("\(style)") {
-                        CUISeparator(
-                            style: style,
-                            linewidth: 3,
-                            orientation: .horizontal
-                        )
-                    }
-                }
             }
+            .fixedSize(horizontal: false, vertical: true)
         }
 
         ForEach(CUISeparator.Orientation.allCases) { orientation in
