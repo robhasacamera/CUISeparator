@@ -97,16 +97,25 @@ public struct CUISeparator: View {
         }
     }
 
+    @ScaledMetric
+    var regularWeight: CGFloat = 1
+
+    @ScaledMetric
+    var boldWeight: CGFloat = 2
+
+    @ScaledMetric
+    var heavyWeight: CGFloat = 3
+
     var lineWidth: CGFloat {
         switch weight {
         case .thin:
-            return 1 / displayScale
+            return max(regularWeight, 1) / displayScale
         case .regular:
-            return 1
+            return regularWeight
         case .bold:
-            return 2
+            return boldWeight
         case .heavy:
-            return 3
+            return heavyWeight
         }
     }
 
@@ -156,7 +165,7 @@ struct _CUISeparatorPath: Shape {
 
 struct Separator_Previews: PreviewProvider {
     static var previews: some View {
-        CUICenteredPreview(title: ".horizontal") {
+        CUICenteredPreview(title: ".horizontal, style & weight") {
             VStack {
                 ForEach(CUISeparator.Style.allCases) { style in
                     ForEach(CUISeparator.Weight.allCases) { weight in
@@ -184,16 +193,34 @@ struct Separator_Previews: PreviewProvider {
             .fixedSize(horizontal: false, vertical: true)
         }
 
-        ForEach(CUISeparator.Orientation.allCases) { orientation in
-            CUICenteredPreview {
-                CUISeparator(orientation: orientation)
+        CUICenteredPreview(title: ".horizontal, size categories") {
+            VStack {
+                ForEach(CUISeparator.Weight.allCases) { weight in
+                    CUICaptionedView(".xs, \(weight)") {
+                        CUISeparator(
+                            weight: weight,
+                            orientation: .horizontal
+                        )
+                        .environment(\.sizeCategory, .extraSmall)
+                    }
+                }
+                Spacer(minLength: 30)
+
+                ForEach(CUISeparator.Weight.allCases) { weight in
+                    CUICaptionedView(".xxxl, \(weight)") {
+                        CUISeparator(
+                            weight: weight,
+                            orientation: .horizontal
+                        )
+                        .environment(\.sizeCategory, .extraExtraExtraLarge)
+                    }
+                }
             }
-        }
-        ForEach(CUISeparator.Orientation.allCases) { orientation in
-            CUICenteredPreview {
-                CUISeparator(orientation: orientation)
-                    .foregroundColor(.yellow)
-            }
+            .fixedSize(horizontal: false, vertical: true)
         }
     }
+}
+
+extension ContentSizeCategory: Identifiable {
+    public var id: ContentSizeCategory { self }
 }
