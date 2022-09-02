@@ -56,7 +56,7 @@ public struct CUISeparator: View {
         case regular
         /// A thicker seprator. Recommended for emphasizing a separation between views.
         case bold
-        /// A much thicker separator. Recommended for use when needing separation between elements that are already using ``CUISeparator/Style/bold`` style separators.
+        /// A much thicker separator. Recommended for use when needing separation between elements that are already using ``bold`` style separators.
         case heavy
 
         public var id: Weight { self }
