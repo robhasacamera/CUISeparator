@@ -27,37 +27,54 @@
 import CUIPreviewKit
 import SwiftUI
 
+/// A styled separator that can be used to visual separate views. Useful for separating views into different groups when using a Stack or ScrollView.
 public struct CUISeparator: View {
     @Environment(\.displayScale)
     var displayScale: CGFloat
 
+    /// The style defines how the separator is draw.
     public enum Style: Identifiable, CaseIterable {
+        /// Draws a solid line for the separator.
         case solid
+        /// Draws a dashed line for the separator. This uses butted line caps.
         case dashed
+        /// Draws a dotted line for the separator. This uses rounded line caps.
         case dotted
 
         public var id: Style { self }
     }
 
-    public enum Orientation: Identifiable, CaseIterable {
-        case horizontal
-        case vertical
-
-        public var id: Orientation { self }
-    }
-
+    /// The weight defines the thickness of the separator.
+    ///
+    /// The weight will scales the spacing and length of any segmented ``CUISeparator/Style`` such as ``CUISeparator/Style/dashed``.
     public enum Weight: Identifiable, CaseIterable {
+        /// The thinest separator that can be displayed. Recommended for adding a subtle separation between elements.
+        ///
+        /// This uses the display scale to calculate the thickness. This will be displayed at 1 *actual* pixel, not a point.
         case thin
+        /// The default thickness for a separator. Recommended for most cases.
         case regular
+        /// A thicker seprator. Recommended for emphasizing a separation between views.
         case bold
+        /// A much thicker separator. Recommended for use when needing separation between elements that are already using ``CUISeparator/Style/bold`` style separators.
         case heavy
 
         public var id: Weight { self }
     }
 
-    public var style: Style
-    public var orientation: Orientation
-    public var weight: Weight
+    /// The orientation for the separator.
+    public enum Orientation: Identifiable, CaseIterable {
+        /// Provides a leading to trailing separator.
+        case horizontal
+        /// Provides a top to bottom separator.
+        case vertical
+
+        public var id: Orientation { self }
+    }
+
+    var style: Style
+    var weight: Weight
+    var orientation: Orientation
 
     var dash: [CGFloat] {
         switch style {
@@ -93,6 +110,14 @@ public struct CUISeparator: View {
         }
     }
 
+    /// Creates a separator that can be used to separator views visually.
+    /// - Parameters:
+    ///   - style: The stlye of the separator.
+    ///   See ``CUISeparator/Style`` for more info.
+    ///   - weight: The weight of the separator
+    ///   See ``CUISeparator/Weight`` for more info.
+    ///   - orientation: The orientation of the separator.
+    ///   See ``CUISeparator/Orientation`` for more info.
     public init(
         style: Style = .solid,
         weight: Weight = .regular,
